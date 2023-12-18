@@ -20,7 +20,19 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   try {
-    const posts = await PostModel.find();
+    const posts = await PostModel.find()
+      .populate({
+        path: 'author',
+        select: 'username email',
+      })
+      .populate({
+        path: 'comments.author',
+        select: 'username email',
+      })
+      .populate({
+        path: 'likes.author',
+        select: 'username email',
+      });
 
     if (posts.length === 0) {
       return res.status(404).json({
@@ -45,7 +57,19 @@ exports.getAllPosts = async (req, res) => {
 exports.getPostById = async (req, res) => {
   try {
     const postId = req.params.id
-    const post = await PostModel.findById(postId);
+    const post = await PostModel.findById(postId)
+      .populate({
+        path: 'author',
+        select: 'username email',
+      })
+      .populate({
+        path: 'comments.author',
+        select: 'username email',
+      })
+      .populate({
+        path: 'likes.author',
+        select: 'username email',
+      });
 
     if (!post) {
       return res.status(404).json({
@@ -134,7 +158,7 @@ exports.createComment = async (req, res) => {
   try {
     const postId = req.params.id;
     const { text } = req.body;
-    const post = await PostModel.findById(postId);
+    const post = await PostModel.findById(postId)
 
     if (!post) {
       return res.status(404).json({
