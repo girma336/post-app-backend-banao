@@ -17,9 +17,9 @@ mongoose
     console.log('DB connection successful!')})
   .catch((error) => console.error('Error connecting to MongoDB:', error.message));
 
-
+const allowedOrigins = ['https://girma336.github.io', 'http://localhost:3000'];
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: allowedOrigins }));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
